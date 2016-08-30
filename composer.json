@@ -1,14 +1,14 @@
 {
-    "name": "paymentsuite/paymentsuite",
+    "name": "sottosviluppo/paymentsuite",
     "description": "PaymentSuite is an easy implementation for lot of Payment Methods for Symfony projects",
     "type": "library",
     "keywords": ["paymentsuite", "payment", "ecommerce", "symfony"],
     "license": "MIT",
     "support": {
         "email": "yuhu@mmoreram.com",
-        "forum": "https://gitter.im/paymentsuite/paymentsuite",
-        "source": "https://github.com/paymentsuite/paymentsuite",
-        "issues": "https://github.com/paymentsuite/paymentsuite/issues"
+        "forum": "https://gitter.im/sottosviluppo/paymentsuite",
+        "source": "https://github.com/sottosviluppo/paymentsuite",
+        "issues": "https://github.com/sottosviluppo/paymentsuite/issues"
     },
     "authors": [
         {
