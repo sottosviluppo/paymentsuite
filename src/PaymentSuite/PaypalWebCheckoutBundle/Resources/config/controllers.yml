@@ -8,7 +8,8 @@ services:
         arguments:
             - "@paymentsuite.paypal_web_checkout.manager"
             - "@templating"
-
+            - "@paymentsuite.order.payment_setter"
+            
     paymentsuite.paypal_web_checkout.process_controller:
         class: PaymentSuite\PaypalWebCheckoutBundle\Controller\ProcessController
         arguments:

@@ -15,10 +15,9 @@
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Controller;
 
+use PaymentSuite\PaypalWebCheckoutBundle\Services\PaypalWebCheckoutManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
-
-use PaymentSuite\PaypalWebCheckoutBundle\Services\PaypalWebCheckoutManager;
 
 /**
  * Class PaymentController.
@@ -39,6 +38,8 @@ class PaymentController
      */
     private $engine;
 
+    private $orderPaymentSetter;
+
     /**
      * Construct.
      *
@@ -47,10 +48,12 @@ class PaymentController
      */
     public function __construct(
         PaypalWebCheckoutManager $paypalWebCheckoutManager,
-        EngineInterface $engine
+        EngineInterface $engine,
+        $orderPaymentSetter
     ) {
         $this->paypalWebCheckoutManager = $paypalWebCheckoutManager;
         $this->engine = $engine;
+        $this->orderPaymentSetter = $orderPaymentSetter;
     }
 
     /**
@@ -67,6 +70,8 @@ class PaymentController
         $formView = $this
             ->paypalWebCheckoutManager
             ->generatePaypalForm();
+
+        $this->orderPaymentSetter->setPaymentInOrder('elcodi_plugin.paypal_web_checkout.getter');
 
         $data = $this
             ->engine
