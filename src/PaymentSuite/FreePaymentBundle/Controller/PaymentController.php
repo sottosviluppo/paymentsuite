@@ -15,12 +15,11 @@
 
 namespace PaymentSuite\FreePaymentBundle\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 use PaymentSuite\FreePaymentBundle\Services\FreePaymentManager;
 use PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaymentCoreBundle\ValueObject\RedirectionRoute;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * PaymentController.
@@ -55,6 +54,8 @@ class PaymentController
      */
     private $urlGenerator;
 
+    private $orderPaymentSetter;
+
     /**
      * Construct.
      *
@@ -67,12 +68,14 @@ class PaymentController
         FreePaymentManager $freePaymentManager,
         RedirectionRoute $successRedirectionRoute,
         PaymentBridgeInterface $paymentBridge,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        $orderPaymentSetter
     ) {
         $this->freePaymentManager = $freePaymentManager;
         $this->successRedirectionRoute = $successRedirectionRoute;
         $this->paymentBridge = $paymentBridge;
         $this->urlGenerator = $urlGenerator;
+        $this->orderPaymentSetter = $orderPaymentSetter;
     }
 
     /**
@@ -85,6 +88,8 @@ class PaymentController
         $this
             ->freePaymentManager
             ->processPayment();
+
+        $this->orderPaymentSetter->setPaymentInOrder('elcodi_plugin.free_payment.getter');
 
         $successUrl = $this
             ->urlGenerator
