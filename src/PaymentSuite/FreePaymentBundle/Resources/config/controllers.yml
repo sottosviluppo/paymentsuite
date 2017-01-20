@@ -11,3 +11,4 @@ services:
             - "@paymentsuite.bridge"
             - "@router"
             - "@paymentsuite.order.payment_setter"
+            - "@kernel"

@@ -26,56 +26,27 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class PaymentController
 {
-    /**
-     * @var FreePaymentManager
-     *
-     * Payment manager
-     */
     private $freePaymentManager;
-
-    /**
-     * @var RedirectionRoute
-     *
-     * Redirection route for success
-     */
     private $successRedirectionRoute;
-
-    /**
-     * @var PaymentBridgeInterface
-     *
-     * Payment bridge
-     */
     private $paymentBridge;
-
-    /**
-     * @var UrlGeneratorInterface
-     *
-     * Url generator
-     */
     private $urlGenerator;
-
     private $orderPaymentSetter;
+    private $kernel;
 
-    /**
-     * Construct.
-     *
-     * @param FreePaymentManager     $freePaymentManager      Payment manager
-     * @param RedirectionRoute       $successRedirectionRoute Success redirection route
-     * @param PaymentBridgeInterface $paymentBridge           Payment bridge
-     * @param UrlGeneratorInterface  $urlGenerator            Url generator
-     */
     public function __construct(
         FreePaymentManager $freePaymentManager,
         RedirectionRoute $successRedirectionRoute,
         PaymentBridgeInterface $paymentBridge,
         UrlGeneratorInterface $urlGenerator,
-        $orderPaymentSetter
+        $orderPaymentSetter,
+        $kernel
     ) {
         $this->freePaymentManager = $freePaymentManager;
         $this->successRedirectionRoute = $successRedirectionRoute;
         $this->paymentBridge = $paymentBridge;
         $this->urlGenerator = $urlGenerator;
         $this->orderPaymentSetter = $orderPaymentSetter;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -85,6 +56,11 @@ class PaymentController
      */
     public function executeAction()
     {
+        // check: freepayment solo in debug, o con amount == 0
+        if ($this->paymentBridge->getAmount() != 0 && !$this->kernel->isDebug()) {
+            throw new \Exception("Impossibile usare free payment con importo diverso da zero", 1);
+        }
+
         $this
             ->freePaymentManager
             ->processPayment();
