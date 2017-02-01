@@ -33,13 +33,19 @@ class PaymentController
     private $orderPaymentSetter;
     private $kernel;
 
+    /**
+     * @var bool if set TRUE indicate that FreePayment is used to create an order.
+     */
+    private $createOrderWithFreePayment;
+
     public function __construct(
         FreePaymentManager $freePaymentManager,
         RedirectionRoute $successRedirectionRoute,
         PaymentBridgeInterface $paymentBridge,
         UrlGeneratorInterface $urlGenerator,
         $orderPaymentSetter,
-        $kernel
+        $kernel,
+        $createOrderWithFreePayment
     ) {
         $this->freePaymentManager = $freePaymentManager;
         $this->successRedirectionRoute = $successRedirectionRoute;
@@ -47,6 +53,7 @@ class PaymentController
         $this->urlGenerator = $urlGenerator;
         $this->orderPaymentSetter = $orderPaymentSetter;
         $this->kernel = $kernel;
+        $this->createOrderWithFreePayment = $createOrderWithFreePayment;
     }
 
     /**
@@ -57,7 +64,7 @@ class PaymentController
     public function executeAction()
     {
         // check: freepayment solo in debug, o con amount == 0
-        if ($this->paymentBridge->getAmount() != 0 && !$this->kernel->isDebug()) {
+        if ($this->paymentBridge->getAmount() != 0 && !$this->kernel->isDebug() && !$this->createOrderWithFreePayment) {
             throw new \Exception("Impossibile usare free payment con importo diverso da zero", 1);
         }
 

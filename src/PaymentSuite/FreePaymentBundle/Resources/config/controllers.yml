@@ -12,3 +12,4 @@ services:
             - "@router"
             - "@paymentsuite.order.payment_setter"
             - "@kernel"
+            - "%create_order_with_freepayment%"
