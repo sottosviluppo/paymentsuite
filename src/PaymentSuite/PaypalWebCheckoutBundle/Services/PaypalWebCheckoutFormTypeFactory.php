@@ -182,7 +182,7 @@ class PaypalWebCheckoutFormTypeFactory {
 
 		if (isset($cartData['discount_amount_cart'])) {
 			$formBuilder->add('discount_amount_cart', 'hidden', [
-				'data' => $cartData['discount_amount_cart'],
+                'data' => $cartData['discount_amount_cart'] / 100,
 			]);
 		}
 
