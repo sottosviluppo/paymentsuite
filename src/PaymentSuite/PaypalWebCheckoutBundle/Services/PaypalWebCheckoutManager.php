@@ -320,7 +320,7 @@ class PaypalWebCheckoutManager
          * this is a security check to prevent frauds by manually
          * changing the papal form.
          */
-        $amountMatches = $this->paymentBridge->getAmount() / $orderCurrency->getDivideBy() == $ipnParameters['mc_gross'];
+        $amountMatches = $this->paymentBridge->getAmount() / $this->getDivideBy() == $ipnParameters['mc_gross'];
         if (!amountMatches) {
             throw new PaymentOrderNotFoundException(sprintf('Errore totale ordine - totale ordine %s', $ipnParameters['mc_gross']));
         }
@@ -338,5 +338,15 @@ class PaypalWebCheckoutManager
          * When a transaction is successful, payment_status has a 'Completed' value.
          */
         return $amountMatches && $ipnValidated && (strcmp($ipnParameters['payment_status'], 'Completed') === 0);
+    }
+
+    private function getDivideBy()
+    {
+        $divideBy = 100;
+        $order = $this->paymentBridge->getOrder();
+        $amount = $order->getAmount();
+        $currency = $amount->getCurrency();
+        $divideBy = $currency->getDivideBy();
+        return $divideBy;
     }
 }

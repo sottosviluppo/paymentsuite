@@ -165,9 +165,11 @@ class PaypalWebCheckoutFormTypeFactory
         $itemsData = $cartData['items'];
         $iteration = 1;
 
+        $divideBy = $this->getDivideBy();
+
         foreach ($itemsData as $orderLine) {
 
-            $amount = $orderLine['amount'] / $orderCurrency->getDivideBy();
+            $amount = $orderLine['amount'] / $divideBy;
             $formBuilder
                 ->add('item_name_' . $iteration, 'hidden', [
                     'data' => $orderLine['item_name'],
@@ -183,13 +185,23 @@ class PaypalWebCheckoutFormTypeFactory
 
         if (isset($cartData['discount_amount_cart'])) {
             $formBuilder->add('discount_amount_cart', 'hidden', [
-                'data' => $cartData['discount_amount_cart'] / $orderCurrency->getDivideBy(),
+                'data' => $cartData['discount_amount_cart'] / $divideBy,
             ]);
         }
 
         return $formBuilder
             ->getForm()
             ->createView();
+    }
+
+    private function getDivideBy()
+    {
+        $divideBy = 100;
+        $order = $this->paymentBridge->getOrder();
+        $amount = $order->getAmount();
+        $currency = $amount->getCurrency();
+        $divideBy = $currency->getDivideBy();
+        return $divideBy;
     }
 
     /**
