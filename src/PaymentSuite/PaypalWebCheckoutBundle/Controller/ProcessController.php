@@ -15,13 +15,12 @@
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 use PaymentSuite\PaymentCoreBundle\Exception\PaymentException;
 use PaymentSuite\PaymentCoreBundle\Services\PaymentLogger;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
 use PaymentSuite\PaypalWebCheckoutBundle\Services\PaypalWebCheckoutManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ProcessController.
@@ -82,13 +81,28 @@ class ProcessController
             ->query
             ->get('order_id');
 
+        if ($orderId == '') {
+            // in some cases the parameter name is "invoice"
+            $orderId = $request->get('invoice');
+
+            if ($orderId == '') {
+                $this
+                    ->paymentLogger
+                    ->log(
+                        'error',
+                        'Called PayPal IPN without order_id',
+                        'paypal-web-checkout'
+                    );
+            }
+        }
+
         try {
             $this
                 ->paypalWebCheckoutManager
                 ->processPaypalIPNMessage(
                     $orderId, $request
-                    ->request
-                    ->all()
+                        ->request
+                        ->all()
                 );
 
             $this
