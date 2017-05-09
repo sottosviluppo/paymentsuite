@@ -108,7 +108,7 @@ class ProcessController
             $this
                 ->paymentLogger
                 ->log(
-                    'info',
+                    'error',
                     'Paypal payment success. Order number #' . $orderId,
                     'paypal-web-checkout'
                 );
