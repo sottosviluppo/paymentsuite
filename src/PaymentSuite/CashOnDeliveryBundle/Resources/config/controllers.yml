@@ -1,0 +1,14 @@
+services:
+
+    #
+    # Controllers
+    #
+    paymentsuite.cash_on_delivery.payment_controller:
+        class: PaymentSuite\CashOnDeliveryBundle\Controller\PaymentController
+        arguments:
+            - "@paymentsuite.cash_on_delivery.manager"
+            - "@paymentsuite.cash_on_delivery.route_success"
+            - "@paymentsuite.bridge"
+            - "@router"
+            - "@paymentsuite.order.payment_setter"
+

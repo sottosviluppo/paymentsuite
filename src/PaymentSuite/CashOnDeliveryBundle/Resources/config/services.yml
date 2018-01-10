@@ -1,0 +1,14 @@
+services:
+
+    #
+    # Services
+    #
+    paymentsuite.cash_on_delivery.method_factory:
+        class: PaymentSuite\CashOnDeliveryBundle\Services\CashOnDeliveryMethodFactory
+
+    paymentsuite.cash_on_delivery.manager:
+        class: PaymentSuite\CashOnDeliveryBundle\Services\CashOnDeliveryManager
+        arguments:
+            - "@paymentsuite.cash_on_delivery.method_factory"
+            - "@paymentsuite.bridge"
+            - "@paymentsuite.event_dispatcher"

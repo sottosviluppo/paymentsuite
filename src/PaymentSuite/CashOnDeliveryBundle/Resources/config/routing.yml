@@ -1,0 +1,10 @@
+paymentsuite_cash_on_delivery_execute:
+  path: /payment/cash_on_delivery/execute
+  defaults: {  _controller: paymentsuite.cash_on_delivery.payment_controller:executeAction }
+
+cash_on_delivery_store_homepage:
+    path: /cash_on_delivery/order/{id}/thanks
+    defaults: { _controller: plugin.cash_on_delivery.cash_delivery_controller:viewAction, 'thanks': true }
+    requirements:
+      orderId: '\d+'
+
